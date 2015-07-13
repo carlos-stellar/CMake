@@ -88,6 +88,7 @@ public:
    */
   void WriteBuild(std::ostream& os, const std::string& comment,
                   const std::string& rule, const cmNinjaDeps& outputs,
+                  const cmNinjaDeps& implicitOuts,
                   const cmNinjaDeps& explicitDeps,
                   const cmNinjaDeps& implicitDeps,
                   const cmNinjaDeps& orderOnlyDeps,
