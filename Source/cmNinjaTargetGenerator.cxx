@@ -603,19 +603,27 @@ void cmNinjaTargetGenerator::WriteObjectBuildStatement(
 
   this->SetMsvcTargetPdbVariable(vars);
 
+  std::vector<std::string> outputList;
+  if (const char* objectOutputs = source->GetProperty("OBJECT_OUTPUTS")) {
+    cmSystemTools::ExpandListArgument(objectOutputs, outputList);
+    std::transform(outputList.begin(), outputList.end(), outputList.begin(),
+                   MapToNinjaPath());
+  }
+
+  cmNinjaDeps implicitOuts;
+  if (this->GetGlobalGenerator()->SupportsImplicitOuts()) {
+    std::swap(outputList, implicitOuts);
+  }
+
   int const commandLineLengthLimit = this->ForceResponseFile() ? -1 : 0;
   std::string const rspfile = objectFileName + ".rsp";
 
   this->GetGlobalGenerator()->WriteBuild(
-    this->GetBuildFileStream(), comment, rule, outputs,
-    /*implicitOuts=*/cmNinjaDeps(), explicitDeps, implicitDeps, orderOnlyDeps,
-    vars, rspfile, commandLineLengthLimit);
+    this->GetBuildFileStream(), comment, rule, outputs, implicitOuts,
+    explicitDeps, implicitDeps, orderOnlyDeps, vars, rspfile,
+    commandLineLengthLimit);
 
-  if (const char* objectOutputs = source->GetProperty("OBJECT_OUTPUTS")) {
-    std::vector<std::string> outputList;
-    cmSystemTools::ExpandListArgument(objectOutputs, outputList);
-    std::transform(outputList.begin(), outputList.end(), outputList.begin(),
-                   MapToNinjaPath());
+  if (!outputList.empty()) {
     this->GetGlobalGenerator()->WritePhonyBuild(this->GetBuildFileStream(),
                                                 "Additional output files.",
                                                 outputList, outputs);

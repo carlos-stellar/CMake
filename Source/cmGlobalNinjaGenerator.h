@@ -314,6 +314,7 @@ public:
   static std::string RequiredNinjaVersion() { return "1.3"; }
   static std::string RequiredNinjaVersionForConsolePool() { return "1.5"; }
   bool SupportsConsolePool() const;
+  bool SupportsImplicitOuts() const;
 
   std::string NinjaOutputPath(std::string const& path);
   bool HasOutputPathPrefix() const { return !this->OutputPathPrefix.empty(); }

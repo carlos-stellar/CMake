@@ -1243,6 +1243,12 @@ bool cmGlobalNinjaGenerator::SupportsConsolePool() const
            RequiredNinjaVersionForConsolePool().c_str()) == false;
 }
 
+bool cmGlobalNinjaGenerator::SupportsImplicitOuts() const
+{
+  // TODO: Check the version once Ninja actually supports this.
+  return true;
+}
+
 void cmGlobalNinjaGenerator::WriteTargetClean(std::ostream& os)
 {
   WriteRule(*this->RulesFileStream, "CLEAN", ninjaCmd() + " -t clean",
