@@ -71,6 +71,8 @@ protected:
 
   std::string ComputeOrderDependsForTarget();
 
+  virtual std::string ComputeFortranModuleDirectory() const;
+
   /**
    * Compute the flags for compilation of object files for a given @a language.
    * @note Generally it is the value of the variable whose name is computed

@@ -100,6 +100,16 @@ std::string cmNinjaTargetGenerator::OrderDependsTargetForTarget()
   return "cmake_order_depends_target_" + this->GetTargetName();
 }
 
+std::string cmNinjaTargetGenerator::ComputeFortranModuleDirectory() const
+{
+  std::string mod_dir =
+    this->cmCommonTargetGenerator::ComputeFortranModuleDirectory();
+  if (mod_dir.empty() && !this->Makefile->IsRootMakefile()) {
+    mod_dir = this->Makefile->GetCurrentBinaryDirectory();
+  }
+  return mod_dir;
+}
+
 // TODO: Most of the code is picked up from
 // void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink),
 // void cmMakefileTargetGenerator::WriteTargetLanguageFlags()
